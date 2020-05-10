@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "327037642436",
+    "firebase_url": "https://gyoza-60903.firebaseio.com",
+    "project_id": "gyoza-60903",
+    "storage_bucket": "gyoza-60903.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327037642436:android:4b6a152af1f58e7b9a0b91",
+        "android_client_info": {
+          "package_name": "com.example.gyoza"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327037642436-qqc8bstmum2g2irhss21fteo08suuhqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKiQoCi4A_FceUdfAmyCwvlvGuKXq54yo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327037642436-qqc8bstmum2g2irhss21fteo08suuhqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
