@@ -1,5 +1,5 @@
 package com.example.gyoza;
-
+//DBとのやりとり確認用にいったん作った、本番だとここが投稿内容とかになる
 public class User {
     public String name;
     public Integer age;
