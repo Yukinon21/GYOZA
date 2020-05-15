@@ -15,9 +15,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <SearchView
+        /*ヘッダーメニューを作って投稿画面に遷移できるようにする*/
+
+        <Button
+            android:id="@+id/send_button"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:text="投稿画面" />
     </LinearLayout>
 
 

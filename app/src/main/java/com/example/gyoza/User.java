@@ -3,6 +3,7 @@ package com.example.gyoza;
 public class User {
     public String name;
     public Integer age;
+    public String introduction;
 
     // 空のコンストラクタの宣言が必須
     public User() {
@@ -18,4 +19,5 @@ public class User {
     public Integer getAge(){
         return age;
     }
+    public String getIntroduction(){return introduction;}
 }

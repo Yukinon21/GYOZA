@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.widget.*;
+import android.view.*;
+import android.content.*;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,7 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        com.google.android.gms.maps.SupportMapFragment mapFragment = (com.google.android.gms.maps.SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -54,19 +57,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // インスタンスの取得
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("info/user");
+        DatabaseReference ref = database.getReference("user");
 
 // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+                com.example.gyoza.User user = dataSnapshot.getValue(User.class);
                 System.out.println("取得したよ"+user.name);
 
                 //ListViewへの表示
-                data.add("コメント１");
                 data.add(user.name);
-                data.add(user.age);
+                data.add(user.introduction);
                 data.add("コメント4");
                 data.add("コメント5");
                 data.add("コメント6");
@@ -84,13 +86,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         });
+        /*Firebaseからのデータ取得ここまで*/
 
+        /*画面遷移ボタンの挙動生成*/
 
+        Button sendButton = (Button) findViewById(R.id.send_button);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), PostActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        /*画面遷移挙動ここまで*/
     }
 
     public void MakeList(ArrayList x) {
-        android.widget.ArrayAdapter adapter = new android.widget.ArrayAdapter(this, android.R.layout.simple_list_item_1, x);
+        android.widget.ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, x);
 
         android.widget.ListView listView = (android.widget.ListView) findViewById(com.example.gyoza.R.id.comments);
         listView.setAdapter(adapter);
