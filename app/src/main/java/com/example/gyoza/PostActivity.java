@@ -43,8 +43,16 @@ public class PostActivity extends AppCompatActivity {
 
                 //insert to Firebase DB
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("message");
-                myRef.setValue(post);
+                DatabaseReference myRef = database.getReference("test");
+
+                //DBに入れる情報をMap型にする
+                java.util.Map<String , String> postMessage = new java.util.HashMap<>();
+                postMessage.put("atcreate","currentTime");
+                postMessage.put("message",post);
+                postMessage.put("user","user1");
+                postMessage.put("categori","categori1");
+
+                myRef.push().setValue(postMessage);
 
                 //popup success message
                 //back to mainView.
@@ -61,6 +69,7 @@ public class PostActivity extends AppCompatActivity {
             }
 
         });
+
     }
 
 }

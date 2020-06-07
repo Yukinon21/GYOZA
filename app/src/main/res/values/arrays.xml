@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_categori">
+        <item>全て</item>
+        <item>バリアフリー</item>
+        <item>混雑状況</item>
+        <item>ハートフル</item>
+    </string-array>
+<!--    もしかしたら駅名はAPIを叩いて持ってこれるかも-->
+    <string-array name="spinner_station">
+        <item>渋谷</item>
+        <item>新宿</item>
+        <item>東京</item>
+        <item>恵比寿</item>
+    </string-array>
+</resources>

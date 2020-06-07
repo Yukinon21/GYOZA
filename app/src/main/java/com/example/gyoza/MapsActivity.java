@@ -2,7 +2,7 @@ package com.example.gyoza;
 
 
 import java.util.ArrayList;
-
+import java.util.*;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.*;
 import android.view.*;
 import android.content.*;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference mFirebaseDatabaseReference;
 
     private ArrayList data = new ArrayList<>();
+    private Message message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,53 +41,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
-
-        /*Firebaseへのデータ登録*/
-
-//        User user = new User("山田太郎",30);
-//        // インスタンスの取得
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//
-//        // ファイルパスを指定してリファレンスを取得
-//        DatabaseReference refName = database.getReference("info/user");
-//        // データを登録
-//        refName.setValue(user);
-
-        /*Firebaseへのデータ登録ここまで*/
-
         /*Firebaseからのデータ取得*/
 
-        // インスタンスの取得
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("user");
+        /*カテゴリ選択されたときの挙動*/
 
-// Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        //取得したカテゴリを引数に、データ取得メソッドを呼ぶ。全ての場合は全件取得。
+
+        Spinner cat_spinner = (android.widget.Spinner) findViewById(com.example.gyoza.R.id.categoriselecter);
+        cat_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                com.example.gyoza.User user = dataSnapshot.getValue(User.class);
-                System.out.println("取得したよ"+user.name);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String categori = (String) adapterView.getSelectedItem();
+                System.out.println("ドロップリスト取得"+categori);
+                String catAns = "全て";
 
-                //ListViewへの表示
-                data.add(user.name);
-                data.add(user.introduction);
-                data.add("コメント4");
-                data.add("コメント5");
-                data.add("コメント6");
-                data.add("コメント7");
-
-                System.out.println("取得したの"+ data.get(1));
-                MakeList(data);
-
+                if (categori.equals(catAns)) {
+                    System.out.println("called all");
+                    getMessage();
+                }else{
+                    System.out.println("called cate");
+                   getMessage(categori);
+                }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //何も選択されなかった時の処理
             }
-
-
         });
+
         /*Firebaseからのデータ取得ここまで*/
 
         /*画面遷移ボタンの挙動生成*/
@@ -100,12 +84,93 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         /*画面遷移挙動ここまで*/
+
+
     }
 
+    //情報取得、全件取得
+    public void getMessage(){
+        /*パスを指定して全件取得*/
+        // インスタンスの取得
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //パスを指定
+        DatabaseReference ref = database.getReference("test");
+
+        //Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<Map<String,Message>> indicator = new com.google.firebase.database.GenericTypeIndicator<java.util.Map<String,Message>>() {
+                };
+                //メッセージの初期化
+                data = new ArrayList<>();
+
+                Map<String , Message> value = dataSnapshot.getValue(indicator);
+                for(Message message : value.values()){
+                    String putmessage = message.getMessage();
+                    data.add(putmessage);
+                    System.out.println(putmessage);
+                }
+                //リスト作成メソッド
+                MakeList(data);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+
+
+        });
+        /*全件取得ここまで*/
+    }
+
+    //情報取得メソッドカテゴリ指定時,選択されたカテゴリを引数にこのメソッドを呼ぶ。
+
+    public void getMessage(String categori){
+        /*条件指定で取得*/
+        // インスタンスの取得
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //path指定
+        DatabaseReference dbref = database.getReference("test");
+
+        //引数のカテゴリを指定して取得
+        dbref.orderByChild("categori").equalTo(categori).addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<Map<String,Message>> indicator = new com.google.firebase.database.GenericTypeIndicator<java.util.Map<String,Message>>() {
+                };
+                //メッセージを初期化する
+                data = new ArrayList<>();
+
+                Map<String , Message> value;
+                value = dataSnapshot.getValue(indicator);
+
+                for(Message message : value.values()){
+                    String putmessage = message.getMessage();
+                    data.add(putmessage);
+                    System.out.println(putmessage);
+                }
+                //リスト作成メソッド
+                MakeList(data);
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull com.google.firebase.database.DatabaseError databaseError) {
+
+            }
+        });
+        /*条件指定取得ここまで*/
+
+    }
+
+
+    //リスト作成メソッド
     public void MakeList(ArrayList x) {
         android.widget.ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, x);
 
-        android.widget.ListView listView = (android.widget.ListView) findViewById(com.example.gyoza.R.id.comments);
+        ListView listView = (android.widget.ListView) findViewById(R.id.comments);
         listView.setAdapter(adapter);
     }
 
