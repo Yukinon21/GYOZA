@@ -51,6 +51,7 @@ public class PostActivity extends AppCompatActivity {
                 postMessage.put("message",post);
                 postMessage.put("user","user1");
                 postMessage.put("categori","categori1");
+                postMessage.put("station","渋谷");
 
                 myRef.push().setValue(postMessage);
 

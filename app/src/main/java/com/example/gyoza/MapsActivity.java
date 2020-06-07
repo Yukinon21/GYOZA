@@ -28,7 +28,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DatabaseReference mFirebaseDatabaseReference;
 
+    //ページが保持する、表示しているデータリスト
     private ArrayList data = new ArrayList<>();
+    //ページが保持する、DBから取得した生データ
+    private Map<String , Message> value;
+    //ページが保持する、選択されている駅名
+    private String station;
     private Message message;
 
     @Override
@@ -43,24 +48,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         /*Firebaseからのデータ取得*/
 
+        //取得した駅名を引数に、データ取得メソッドを呼ぶ。
+        Spinner sta_spinner = (android.widget.Spinner) findViewById(com.example.gyoza.R.id.stationselecter);
+        sta_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                station = (String) adapterView.getSelectedItem();
+                System.out.println("ドロップリスト駅名取得" + station);
+
+                getMessagebySta(station);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //何も選択されなかった時の処理
+            }
+        });
         /*カテゴリ選択されたときの挙動*/
 
-        //取得したカテゴリを引数に、データ取得メソッドを呼ぶ。全ての場合は全件取得。
+        //取得したカテゴリを引数に、今保持している情報を絞り込む。全ての場合は再度駅名取得メソッドを呼ぶ。
 
         Spinner cat_spinner = (android.widget.Spinner) findViewById(com.example.gyoza.R.id.categoriselecter);
         cat_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String categori = (String) adapterView.getSelectedItem();
-                System.out.println("ドロップリスト取得"+categori);
+                System.out.println("ドロップリストカテゴリ取得"+categori);
                 String catAns = "全て";
 
+                //条件分岐
                 if (categori.equals(catAns)) {
                     System.out.println("called all");
-                    getMessage();
+                    getMessagebySta(station);
                 }else{
                     System.out.println("called cate");
-                   getMessage(categori);
+                   getMessagebyCat(categori);
                 }
             }
 
@@ -88,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    //情報取得、全件取得
+    //条件指定なし全件取得
     public void getMessage(){
         /*パスを指定して全件取得*/
         // インスタンスの取得
@@ -126,25 +148,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         /*全件取得ここまで*/
     }
 
-    //情報取得メソッドカテゴリ指定時,選択されたカテゴリを引数にこのメソッドを呼ぶ。
+    //カテゴリ指定時,選択されたカテゴリを引数にこのメソッドを呼ぶ。
 
-    public void getMessage(String categori){
-        /*条件指定で取得*/
+    public void getMessagebyCat(String categori){
+
+        //メッセージを初期化する
+        data = new ArrayList<>();
+
+        //すでに取得している情報からさらに情報を絞り込む
+        //選択されたカテゴリに一致する場合、messageを表示する
+
+        for(Message message : value.values()){
+            if (message.getCategori().equals(categori)){
+                String putmessage = message.getMessage();
+                data.add(putmessage);
+                System.out.println(putmessage);
+            }else{
+            }
+        }
+        //リスト作成メソッド
+        MakeList(data);
+    }
+
+
+
+
+
+    //駅名の条件指定取得
+    public void getMessagebySta(String station){
         // インスタンスの取得
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //path指定
         DatabaseReference dbref = database.getReference("test");
 
         //引数のカテゴリを指定して取得
-        dbref.orderByChild("categori").equalTo(categori).addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        dbref.orderByChild("station").equalTo(station).addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<Map<String,Message>> indicator = new com.google.firebase.database.GenericTypeIndicator<java.util.Map<String,Message>>() {
                 };
-                //メッセージを初期化する
+                //メッセージリストを初期化して入れ直す
                 data = new ArrayList<>();
-
-                Map<String , Message> value;
                 value = dataSnapshot.getValue(indicator);
 
                 for(Message message : value.values()){
@@ -161,8 +205,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-        /*条件指定取得ここまで*/
-
     }
 
 
@@ -188,8 +230,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
+        MarkerOptions options = new com.google.android.gms.maps.model.MarkerOptions();
         LatLng tokyo = new LatLng(35, 139);
-        mMap.addMarker(new MarkerOptions().position(tokyo).title("Marker in Tokyo"));
+        mMap.addMarker(options.position(tokyo).title("タイトル").snippet("詳細情報"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tokyo));
     }
 }
