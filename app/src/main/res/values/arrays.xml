@@ -13,4 +13,9 @@
         <item>東京</item>
         <item>恵比寿</item>
     </string-array>
+    <string-array name="spinner_categori_post">
+        <item>バリアフリー</item>
+        <item>混雑状況</item>
+        <item>ハートフル</item>
+    </string-array>
 </resources>

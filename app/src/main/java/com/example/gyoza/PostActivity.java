@@ -17,6 +17,11 @@ public class PostActivity extends AppCompatActivity {
     private TextView textView;
     private Button backbutton;
 
+    //このページで保持する取得したカテゴリ
+    private String categori;
+    //このページで保持する取得した駅名
+    private String station;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,20 @@ public class PostActivity extends AppCompatActivity {
                     textView.setText(post);
                     editText.setHint("投稿文");//ヒント文
                 }
+                //カテゴリ選択
+                android.widget.Spinner cat_spinner_pt = (android.widget.Spinner) findViewById(com.example.gyoza.R.id.categoriselecter_post);
+                cat_spinner_pt.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                        categori = (String) parent.getSelectedItem();
+                        System.out.println(categori);
+                    }
+
+                    @Override
+                    public void onNothingSelected(android.widget.AdapterView<?> parent) {
+
+                    }
+                });
 
                 //insert to Firebase DB
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -47,10 +66,11 @@ public class PostActivity extends AppCompatActivity {
 
                 //DBに入れる情報をMap型にする
                 java.util.Map<String , String> postMessage = new java.util.HashMap<>();
+                //現在時刻を取得する関数をいれる
                 postMessage.put("atcreate","currentTime");
                 postMessage.put("message",post);
                 postMessage.put("user","user1");
-                postMessage.put("categori","categori1");
+                postMessage.put("categori",categori);
                 postMessage.put("station","渋谷");
 
                 myRef.push().setValue(postMessage);

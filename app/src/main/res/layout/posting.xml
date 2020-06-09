@@ -25,6 +25,12 @@
         android:onClick="onClick"/>
 
     </LinearLayout>
+    <Spinner
+        android:id="@+id/categoriselecter_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/spinner_categori_post"
+        />
 
     <TextView
         android:id="@+id/textView"
