@@ -1,0 +1,91 @@
+{
+  "categori" : {
+    "cat01" : {
+      "catname" : "売店",
+      "message" : {
+        "message01" : true
+      }
+    },
+    "cat02" : {
+      "catname" : "改札",
+      "message" : {
+        "member01" : "Steve",
+        "member02" : "Bob"
+      }
+    }
+  },
+  "test" : {
+    "-M7mYDB8InlI91-VPyI4" : {
+      "atcreate" : "2020-05-19",
+      "categori" : "platHome",
+      "message" : "Push test !",
+      "postuser" : "Donna",
+      "station" : "渋谷"
+    },
+    "-M8YdHw1mQRJb1qbLyeh" : {
+      "atcreate" : "currentTime",
+      "categori" : "categori1",
+      "message" : "message007",
+      "station" : "渋谷",
+      "user" : "user1"
+    },
+    "-M8Yf4akAi2QneJq0C1a" : {
+      "atcreate" : "currentTime",
+      "categori" : "categori1",
+      "message" : "GYOZA is delicious!",
+      "station" : "新宿",
+      "user" : "user1"
+    },
+    "-M8ZgKi3DtEM9jG4Uc7B" : {
+      "atcreate" : "currentTime",
+      "categori" : "ハートフル",
+      "message" : "PAPA",
+      "station" : "東京",
+      "user" : "user1"
+    },
+    "-M99i_pMyt4PB3Sy86A7" : {
+      "atcreate" : "currentTime",
+      "categori" : "categori1",
+      "message" : "wow",
+      "station" : "恵比寿",
+      "user" : "user1"
+    },
+    
+    "message002" : {
+      "atcreate" : "2020-05-19",
+      "categori" : "バリアフリー",
+      "message" : "korekore",
+      "postuser" : "Donna",
+      "station" : "新宿"
+    },
+    "message003" : {
+      "atcreate" : "2020-05-19",
+      "categori" : "platHome",
+      "message" : "For message003...",
+      "postuser" : "Donna",
+      "station" : "渋谷"
+    }
+  },
+  "user" : {
+    "Alice" : {
+      "age" : "25",
+      "introduction" : "Hello, this is Alice.",
+      "name" : "Alice"
+    },
+    "Bob" : {
+      "age" : "50",
+      "introduction" : "Hello, this is Bob. I'm from California and blah blah........長い文章",
+      "name" : "Bob"
+    },
+    "Joey" : {
+      "age" : "20",
+      "introduction" : "Hello, this is Joey.",
+      "name" : "Joey"
+    },
+    "Steve" : {
+      "age" : "20",
+      "introduction" : "Hello, this is Steve.",
+      "name" : "Steve"
+    }
+  }
+}
